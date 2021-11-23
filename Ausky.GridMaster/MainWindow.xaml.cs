@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace Ausky.GridMaster
 {
@@ -24,5 +25,20 @@ namespace Ausky.GridMaster
         {
             InitializeComponent();
         }
+
+        private void OnBrowserClicked(object source, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "All Files(*.*)|*.*";
+            ofd.Multiselect = false;
+            ofd.CheckFileExists = true;
+            ofd.CheckPathExists = true;
+
+            if (ofd.ShowDialog() != true)
+                return;
+
+            ((MainPresenter)DataContext).ImagePath = ofd.FileName;
+        }
+
     }
 }

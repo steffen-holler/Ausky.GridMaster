@@ -5,8 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ausky.GridMaster"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Ausky Grid-Master" Height="450" Width="800">
+    <Window.Resources>
+        <local:ConverterNumberScaler x:Key="inHalf" Scaler="0.5" />
+
+        <Style x:Key="Header2" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+
+        <Style x:Key="StandardText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+    </Window.Resources>
+    <Window.DataContext>
+        <local:MainPresenter/>
+    </Window.DataContext>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="grdImageLayers" Grid.Column="1" Background="#242526">
+            <Image Source="{Binding Image}">
+                <Image.RenderTransform>
+                    <RotateTransform Angle="{Binding Rotation}"
+                                     CenterX="{Binding Width, Converter={StaticResource inHalf}}"
+                                     CenterY="{Binding Height, Converter={StaticResource inHalf}}"/>
+                </Image.RenderTransform>
+            </Image>
+            <Image Source="{Binding GridLayer}"/>
+        </Grid>
+
+
+        <StackPanel Background="Maroon" MinWidth="120">
+            <TextBlock Text="Image Source" Style="{StaticResource Header2}"/>
+            <Grid Name="grdFileSelector">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Margin="3,1.5" Grid.Column="0" Name="tbxImageSource" Text="{Binding ImagePath}"/>
+                <Button Margin="3,1.5" Grid.Column="1" Content="..." Click="OnBrowserClicked"/>
+            </Grid>
+
+            <TextBlock Text="Rotation" Style="{StaticResource Header2}"/>
+            <Grid Name="grdRotation" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Slider Name="slrRotation" Grid.Column="0" Margin="3,1.5" Value="{Binding Rotation}"
+                        Minimum="0" Maximum="360" SmallChange="0.1" LargeChange="5" TickFrequency="15"/>
+                <TextBox x:Name="tbxRotation" Text="{Binding Rotation, Mode=TwoWay}" 
+                         Margin="3,1.5" Grid.Column="1"/>
+
+            </Grid>
+
+            <TextBlock Text="Grid - Columns" Style="{StaticResource Header2}"/>
+            <Grid Name="grdColumns">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Slider x:Name="slrColumns" Grid.Column="0" Margin="3,1.5" Value="{Binding Columns}"
+                        Minimum="0" Maximum="{Binding Width}"/>
+                <TextBox Name="tbxColumns" Grid.Column="1" Margin="3,1.5" 
+                         Text="{Binding Columns, Mode=TwoWay}"/>
+            </Grid>
+
+            <TextBlock Text="Grid - Rows" Style="{StaticResource Header2}"/>
+            <Grid Name="grdRows">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Slider x:Name="slrRows" Grid.Column="0" Margin="3,1.5" Value="{Binding Rows}"
+                        Minimum="0" Maximum="{Binding Height}"/>
+                <TextBox Name="tbxRows" Grid.Column="1" Margin="3,1.5" 
+                         Text="{Binding Rows, Mode=TwoWay}"/>
+            </Grid>
+        </StackPanel>
+        <GridSplitter Width="1" Margin="3,0,0,0"/>
 
     </Grid>
 </Window>
