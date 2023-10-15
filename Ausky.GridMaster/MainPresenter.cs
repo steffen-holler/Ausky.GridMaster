@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,48 +8,74 @@ using System.Windows.Media.Imaging;
 
 namespace Ausky.GridMaster
 {
-    internal class MainPresenter : Notify 
+    internal class MainPresenter : ObservableObject 
     {
+        #region member variables
         private string _imagePath = "";
+        private double _rotation = 0.0;
+        private int _majorColumns = 3;
+        private int _majorRows = 3;
+        private int _minorColumns = 8;
+        private int _minorRows = 8;
+        private ImageSource _image = null;
+        private ImageSource _gridLayer = null;
+        #endregion
+
+        #region properties
         public string ImagePath
         {
             get { return _imagePath; }
             set 
             { 
-                _imagePath = value; 
-                OnPropertyChanged();
-                LoadImage(value);
+                if (SetProperty(ref _imagePath, value))
+                    LoadImage(value);   
             }
         }
 
-        private double _rotation = 0.0;
         public double Rotation
         {
             get { return _rotation; }  
-            set { _rotation = value; OnPropertyChanged(); }
+            set { SetProperty(ref _rotation, value); }
         }
 
-        private int _columns = 3;
-        public int Columns
+        public int MajorColumns
         {
-            get { return _columns; }   
+            get { return _majorColumns; }   
             set 
             { 
-                _columns = value; 
+                if (SetProperty(ref _majorColumns, value))
+                    UpdateGrid();
+            }
+        }
+
+        public int MajorRows
+        {
+            get { return _majorRows; }   
+            set 
+            {
+                _majorRows = value; 
                 OnPropertyChanged();
                 UpdateGrid();
             }
         }
 
-        private int _rows = 3;
-        public int Rows
+        public int MinorColumns
         {
-            get { return _rows; }   
-            set 
+            get { return _minorColumns; }
+            set
             {
-                _rows = value; 
-                OnPropertyChanged();
-                UpdateGrid();
+                if (SetProperty(ref _minorColumns, value))
+                    UpdateGrid();
+            }
+        }
+
+        public int MinorRows
+        {
+            get { return _minorRows; }
+            set
+            {
+                if (SetProperty(ref _minorRows, value))
+                    UpdateGrid();
             }
         }
 
@@ -70,19 +97,18 @@ namespace Ausky.GridMaster
             }
         }
 
-        private ImageSource _image = null;
         public ImageSource Image
         {
             get { return _image; }
-            private set { _image = value; OnPropertyChanged();}
+            private set { SetProperty(ref _image, value); }
         }
 
-        private ImageSource _gridLayer = null;
         public ImageSource GridLayer
         {
             get { return _gridLayer; }
-            private set { _gridLayer = value; OnPropertyChanged();}
+            private set { SetProperty(ref _gridLayer, value); }
         }
+        #endregion
 
         private void LoadImage(string source)
         {
@@ -101,8 +127,10 @@ namespace Ausky.GridMaster
                 return;
 
             int bitDepth = 4;
-            int gridWidth = (int)Math.Round(Image.Width / Columns, 0);
-            int gridHeight = (int)Math.Round(Image.Height / Rows, 0);
+            int gridWidth = (int)Math.Round(Image.Width / MajorColumns, 0);
+            int smallGridWidth = (int)Math.Round((double)gridWidth / MinorColumns, 0);
+            int gridHeight = (int)Math.Round(Image.Height / MajorRows, 0);
+            int smallGridHeight = (int)Math.Round((double)gridHeight / MinorRows, 0);
             var dpi = 96.0;
             var stride = Width * bitDepth;
             byte[] data = new byte[bitDepth* Width * Height];
@@ -119,13 +147,27 @@ namespace Ausky.GridMaster
                     data[i + 2] = 255; // red
                     data[i + 3] = 255; // alpha
                 }
+                else if (y % smallGridHeight == 0)
+                {
+                    data[i] = 255;     // blue
+                    data[i + 1] = 255; // green 
+                    data[i + 2] = 0; // read
+                    data[i + 3] = 255; // alpha
+                }
                 else if (x % gridWidth == 0)
                 {
                     data[i] = 255;   // blue
                     data[i + 1] = 0; // green 
-                    data[i + 2] = 0; // red
+                    data[i + 2] = 255; // red
                     data[i + 3] = 255; // alpha
-                }                
+                }
+                else if (x % smallGridWidth == 0)
+                {
+                    data[i] = 255;
+                    data[i + 1] = 255;
+                    data[i + 2] = 0;
+                    data[i + 3] = 255;
+                }
                 else
                 {
                     data[i] = 0;

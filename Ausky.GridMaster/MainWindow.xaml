@@ -39,55 +39,95 @@
             <Image Source="{Binding GridLayer}"/>
         </Grid>
 
+        <Expander Background="DarkRed"
+                  Foreground="Snow"
+                  FontWeight="Bold"
+                  ExpandDirection="Left">
+            <Expander.Header>
+                <TextBlock Text="Tools"
+                           Margin="2">
+                    <TextBlock.LayoutTransform>
+                        <RotateTransform Angle="90"/>
+                    </TextBlock.LayoutTransform>
+                </TextBlock>
+            </Expander.Header>
+            
+            <StackPanel Background="Maroon" MinWidth="120">
+                <TextBlock Text="Image Source" Style="{StaticResource Header2}"/>
+                <Grid Name="grdFileSelector">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Margin="3,1.5" Grid.Column="0" Name="tbxImageSource" Text="{Binding ImagePath}"/>
+                    <Button Margin="3,1.5" Grid.Column="1" Content="..." Click="OnBrowserClicked"/>
+                </Grid>
 
-        <StackPanel Background="Maroon" MinWidth="120">
-            <TextBlock Text="Image Source" Style="{StaticResource Header2}"/>
-            <Grid Name="grdFileSelector">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="30"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Margin="3,1.5" Grid.Column="0" Name="tbxImageSource" Text="{Binding ImagePath}"/>
-                <Button Margin="3,1.5" Grid.Column="1" Content="..." Click="OnBrowserClicked"/>
-            </Grid>
+                <TextBlock Text="Rotation" Style="{StaticResource Header2}"/>
+                <Grid Name="grdRotation" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider Name="slrRotation" Grid.Column="0" Margin="3,1.5" Value="{Binding Rotation}"
+                            Minimum="0" Maximum="360" SmallChange="0.1" LargeChange="5" TickFrequency="15"/>
+                    <TextBox x:Name="tbxRotation" Text="{Binding Rotation, Mode=TwoWay}" 
+                             Margin="3,1.5" Grid.Column="1"/>
 
-            <TextBlock Text="Rotation" Style="{StaticResource Header2}"/>
-            <Grid Name="grdRotation" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="30"/>
-                </Grid.ColumnDefinitions>
-                <Slider Name="slrRotation" Grid.Column="0" Margin="3,1.5" Value="{Binding Rotation}"
-                        Minimum="0" Maximum="360" SmallChange="0.1" LargeChange="5" TickFrequency="15"/>
-                <TextBox x:Name="tbxRotation" Text="{Binding Rotation, Mode=TwoWay}" 
-                         Margin="3,1.5" Grid.Column="1"/>
+                </Grid>
 
-            </Grid>
+                <TextBlock Text="Major Columns" Style="{StaticResource Header2}"/>
+                <Grid Name="grdColumns">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider x:Name="slrColumns" Grid.Column="0" Margin="3,1.5" Value="{Binding MajorColumns}"
+                            Minimum="0" Maximum="{Binding Width}"/>
+                    <TextBox Name="tbxColumns" Grid.Column="1" Margin="3,1.5" 
+                             Text="{Binding MajorColumns, Mode=TwoWay}"/>
+                </Grid>
 
-            <TextBlock Text="Grid - Columns" Style="{StaticResource Header2}"/>
-            <Grid Name="grdColumns">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="30"/>
-                </Grid.ColumnDefinitions>
-                <Slider x:Name="slrColumns" Grid.Column="0" Margin="3,1.5" Value="{Binding Columns}"
-                        Minimum="0" Maximum="{Binding Width}"/>
-                <TextBox Name="tbxColumns" Grid.Column="1" Margin="3,1.5" 
-                         Text="{Binding Columns, Mode=TwoWay}"/>
-            </Grid>
+                <TextBlock Text="Minor Columns" Style="{StaticResource Header2}"/>
+                <Grid Name="grdMinorColumns">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider x:Name="slrMinorColumns" Grid.Column="0" Margin="3,1.5" Value="{Binding MinorColumns}"
+                            Minimum="0" Maximum="{Binding Width}"/>
+                    <TextBox Name="tbxMinorColumns" Grid.Column="1" Margin="3,1.5" 
+                             Text="{Binding MinorColumns, Mode=TwoWay}"/>
+                </Grid>
 
-            <TextBlock Text="Grid - Rows" Style="{StaticResource Header2}"/>
-            <Grid Name="grdRows">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="30"/>
-                </Grid.ColumnDefinitions>
-                <Slider x:Name="slrRows" Grid.Column="0" Margin="3,1.5" Value="{Binding Rows}"
-                        Minimum="0" Maximum="{Binding Height}"/>
-                <TextBox Name="tbxRows" Grid.Column="1" Margin="3,1.5" 
-                         Text="{Binding Rows, Mode=TwoWay}"/>
-            </Grid>
-        </StackPanel>
+                
+                <TextBlock Text="Major Rows" Style="{StaticResource Header2}"/>
+                <Grid Name="grdRows">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider x:Name="slrRows" Grid.Column="0" Margin="3,1.5" Value="{Binding MajorRows}"
+                            Minimum="0" Maximum="{Binding Height}"/>
+                    <TextBox Name="tbxRows" Grid.Column="1" Margin="3,1.5" 
+                             Text="{Binding MajorRows, Mode=TwoWay}"/>
+                </Grid>
+
+                <TextBlock Text="Major Rows" Style="{StaticResource Header2}"/>
+                <Grid Name="grdMinorRows">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider x:Name="slrMinorRows" Grid.Column="0" Margin="3,1.5" Value="{Binding MinorRows}"
+                            Minimum="0" Maximum="{Binding Height}"/>
+                    <TextBox Name="tbxMinorRows" Grid.Column="1" Margin="3,1.5" 
+                             Text="{Binding MinorRows, Mode=TwoWay}"/>
+                </Grid>
+
+
+            </StackPanel>
+        </Expander>
         <GridSplitter Width="1" Margin="3,0,0,0"/>
 
     </Grid>
